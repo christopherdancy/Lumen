@@ -40,6 +40,15 @@ describe("SigTest", () => {
           1,
           (await (await ethers.provider.getBlock("latest")).timestamp) + 1
         );
+      // self attestation
+      await expect(poaContract.connect(attestor).attest(attestor.address))
+        .to.emit(poaContract, "Attested")
+        .withArgs(
+          attestor.address,
+          attestor.address,
+          2,
+          (await (await ethers.provider.getBlock("latest")).timestamp) + 1
+        );
     });
   });
 });
