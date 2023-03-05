@@ -1,6 +1,12 @@
 [
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "ats",
+        "type": "address"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "constructor"
   },
@@ -159,6 +165,28 @@
         "internalType": "address",
         "name": "requestor",
         "type": "address"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "about",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "key",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes",
+            "name": "val",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct AttestationStation.AttestationData[]",
+        "name": "attests",
+        "type": "tuple[]"
       }
     ],
     "name": "attest",
@@ -463,19 +491,6 @@
     "name": "transferFrom",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "usdc",
-    "outputs": [
-      {
-        "internalType": "contract IERC20",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   }
 ]

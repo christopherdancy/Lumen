@@ -3,10 +3,11 @@ pragma solidity ^0.8.7;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "./mocks/AttestationStation.sol";
 
 contract ProofofAccess is ERC721 {
     using Counters for Counters.Counter;
-    IERC20 public usdc;
+    AttestationStation private attestationStatation;
 
     Counters.Counter private _tokenIdCounter;
 
@@ -29,7 +30,9 @@ contract ProofofAccess is ERC721 {
         uint256 timestamp
     );
 
-    constructor() ERC721("SoulAttestedPortfolio", "SAP") {}
+    constructor(address ats) ERC721("SoulAttestedPortfolio", "SAP") {
+        attestationStatation = AttestationStation(ats);
+    }
 
     function request(address attester) public returns (uint256 tokenId) {
         _tokenIdCounter.increment();
@@ -39,12 +42,13 @@ contract ProofofAccess is ERC721 {
     }
 
     // include self attestions + when address was provided
-    function attest(address requestor) public {
+    function attest(address requestor, AttestationStation.AttestationData[] memory attests) public {
         uint256 tokenId = requests[requestor][msg.sender];
         // Check if this is a self-attestion
         if (requestor == msg.sender && tokenId == 0)
             tokenId = request(msg.sender);
         require(tokenId != 0, "Request Does Not Exist");
+        attestationStatation.attest(attests);
 
         // If token does not exist mint + setTokenURI
         if (!_exists(tokenId)) _safeMint(msg.sender, tokenId);
@@ -59,12 +63,20 @@ contract ProofofAccess is ERC721 {
         );
     }
 
-    function myAttestData(address attestor) public view returns(uint256[] memory) {
+    function myAttestData(address attestor)
+        public
+        view
+        returns (uint256[] memory)
+    {
         return attestations[attestor];
     }
 
-    function tokenIdData(address requestor, address attestor) public view returns(uint256) {
-        uint tokenId = requests[requestor][attestor];
+    function tokenIdData(address requestor, address attestor)
+        public
+        view
+        returns (uint256)
+    {
+        uint256 tokenId = requests[requestor][attestor];
         return tokenPortfolios[tokenId].timestamp;
     }
 
