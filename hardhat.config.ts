@@ -48,6 +48,62 @@ const config: HardhatUserConfig = {
       default: 0,
     },
   },
+  networks: {
+    mumbai: {
+      chainId: 80001,
+      url: process.env.POLYGON_MUMBAI_PROVIDER,
+      accounts: {
+        mnemonic: process.env.MNEMONIC,
+        initialIndex: 0,
+        count: 20,
+        passphrase: "",
+      },
+    },
+    optimismgoerli: {
+      chainId: 420,
+      url: process.env.OPTIMISM_GOERLI_PROVIDER,
+      accounts: {
+        mnemonic: process.env.MNEMONIC,
+        path: "m/44'/60'/0'/0",
+        initialIndex: 0,
+        count: 20,
+        passphrase: "",
+      },
+    },
+    arbitrum: {
+      chainId: 421613,
+      url: process.env.ARB_TESTNET_PROVIDER,
+      accounts: {
+        mnemonic: process.env.MNEMONIC,
+        path: "m/44'/60'/0'/0",
+        initialIndex: 0,
+        count: 20,
+        passphrase: "",
+      },
+    },
+    scroll: {
+      chainId: 5,
+      url: process.env.SCROLL_TESTNET_PROVIDER,
+      accounts: {
+        mnemonic: process.env.MNEMONIC,
+        path: "m/44'/60'/0'/0",
+        initialIndex: 0,
+        count: 20,
+        passphrase: "",
+      },
+    },
+    base: {
+      chainId: 84531,
+      url: process.env.BASE_TESTNET_PROVIDER,
+      accounts: {
+        mnemonic: process.env.MNEMONIC,
+        path: "m/44'/60'/0'/0",
+        initialIndex: 0,
+        count: 20,
+        passphrase: "",
+      },
+    },
+  },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
   },
@@ -57,4 +113,3 @@ const config: HardhatUserConfig = {
 };
 
 export default config;
-

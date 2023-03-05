@@ -13,8 +13,10 @@ contract ProofofAccess is ERC721 {
     struct PortfolioMetadata {
         uint256 timestamp;
     }
-    mapping(uint256 => PortfolioMetadata) public tokenPortfolios;
-    mapping(address => mapping(address => uint256)) public requests;
+    mapping(uint256 => PortfolioMetadata) private tokenPortfolios;
+    mapping(address => mapping(address => uint256)) private requests;
+    mapping(address => uint256[]) private attestations;
+
     event Requested(
         address indexed requestor,
         address indexed attester,
@@ -47,6 +49,7 @@ contract ProofofAccess is ERC721 {
         // If token does not exist mint + setTokenURI
         if (!_exists(tokenId)) _safeMint(msg.sender, tokenId);
         _setTokenURI(tokenId);
+        attestations[msg.sender].push(tokenId);
 
         emit Attested(
             requestor,
@@ -54,6 +57,15 @@ contract ProofofAccess is ERC721 {
             tokenId,
             tokenPortfolios[tokenId].timestamp
         );
+    }
+
+    function myAttestData(address attestor) public view returns(uint256[] memory) {
+        return attestations[attestor];
+    }
+
+    function tokenIdData(address requestor, address attestor) public view returns(uint256) {
+        uint tokenId = requests[requestor][attestor];
+        return tokenPortfolios[tokenId].timestamp;
     }
 
     function _setTokenURI(uint256 tokenId) internal virtual {
